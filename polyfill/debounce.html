@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Debounce</title>
+</head>
+
+<body>
+
+    <h2>Debounce Example</h2>
+    <button id="btn">Click Me Rapidly</button>
+    <p id="output"></p>
+
+    <script>
+        let totalClicks = 0;
+        let debouncedCalls = 0;
+
+        // Simple debounce function
+        function debounce(func, delay) {
+            let timer;
+            return function () {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    func();
+                }, delay);
+            };
+        }
+
+        function handleDebouncedClick() {
+            debouncedCalls++;
+            updateDisplay(); // Update debounced count
+        }
+
+        function updateDisplay() {
+            document.getElementById("output").innerText =
+                "Total Clicks: " + totalClicks + "\n" +
+                "Debounced Calls: " + debouncedCalls;
+        }
+
+        const debouncedClick = debounce(handleDebouncedClick, 2000); // Wait 2s after last click
+
+        document.getElementById("btn").addEventListener("click", function () {
+            totalClicks++;
+            updateDisplay();        // Show total clicks immediately
+            debouncedClick();       // Only call after 2s of no clicks
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Simple Throttle</title>
+</head>
+
+<body>
+
+    <h2>Throttle Example</h2>
+    <button id="btn">Click Me</button>
+    <p id="output"></p>
+
+    <script>
+        let totalClicks = 0;
+        let throttledCalls = 0;
+
+        function throttle(func, limit) {
+            let lastCall = 0;
+            return function () {
+                const now = Date.now();
+                if (now - lastCall >= limit) {
+                    lastCall = now;
+                    func();
+                }
+            };
+        }
+
+        function handleClick() {
+            throttledCalls++;
+            updateDisplay(); // Update throttled count
+        }
+
+        function updateDisplay() {
+            document.getElementById("output").innerText =
+                "Total Clicks: " + totalClicks + "\n" +
+                "Throttled Calls: " + throttledCalls;
+        }
+
+        const throttledClick = throttle(handleClick, 5000); // Call once every 5 seconds
+
+        document.getElementById("btn").addEventListener("click", function () {
+            totalClicks++;
+            updateDisplay();       // Show total clicks immediately
+            throttledClick();      // Show throttled count only every 5 seconds
+        });
+    </script>
+
+</body>
+
+</html>
